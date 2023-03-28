@@ -1,0 +1,52 @@
+---
+title: "Homework-7"
+author: "Tanishq Jain"
+date: "2023-03-28"
+output: html_document
+---
+
+```{r}
+library(productplots)
+data(happy, package = "productplots")
+HAPPY <- readRDS("data/HAPPY.rds")
+
+#1
+
+HAPPY[HAPPY == "IAP" | HAPPY == "DK" | HAPPY == "NA"] <- NA
+
+#2
+
+HAPPY$AGE[HAPPY$AGE == "89 OR OLDER"] <- 89
+HAPPY$AGE <- as.numeric(HAPPY$AGE)
+library(dplyr)
+HAPPY <- HAPPY %>% mutate(
+  HAPPY = factor(HAPPY),
+  SEX = factor(SEX),
+  MARITAL = factor(MARITAL, levels = c("NEVER MARRIED", "MARRIED", "SEPARATED", "WIDOWED", "DIVORCED")),
+  DEGREE = factor(DEGREE),
+  FINRELA = factor(FINRELA),
+  HEALTH = factor(HEALTH),
+  PARTYID = factor(PARTYID),
+  POLVIEWS = factor(POLVIEWS)
+)
+
+#3
+library(ggplot2)
+saveRDS(HAPPY, "HAPPY_clean.rds")
+ggplot(HAPPY, aes(x = AGE)) +
+  geom_histogram(binwidth = 1, color = "black", fill = "white") +
+  labs(x = "Age", y = "Frequency", title = "Distribution of Age in the HAPPY Dataset")
+
+
+##2
+
+ggplot(HAPPY, aes(x=HEALTH, y=HAPPY)) + 
+  geom_boxplot() +
+  facet_wrap(~cut(AGE, breaks=c(0,25,35,45,55,65,75,100)), ncol=2)
+
+
+
+
+
+```
+
